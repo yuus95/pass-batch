@@ -53,14 +53,12 @@ public class UsePassesJobConfig {
 
     @Bean
     public Step usePassesStep() {
-        this.stepBuilderFactory.get("usePassesStep")
+        return this.stepBuilderFactory.get("usePassesStep")
                 .<BookingEntity, Future<BookingEntity>>chunk(CHUNK_SIZE)
                 .reader(usePassesItemReader())
                 .processor(usePassesAsyncItemProcessor())
                 .writer(usePassesAsyncItemWriter())
                 .build();
-
-
     }
 
     @Bean
@@ -71,7 +69,6 @@ public class UsePassesJobConfig {
                 .queryString("select b from BookingEntity b join fetch b.passEntity where b.status = :status and b.usedPass = false and b.endedAt < :endedAt")
                 .parameterValues(Map.of("status", BookingStatus.COMPLETED, "endedAt", LocalDateTime.now()))
                 .build();
-
     }
 
     @Bean
