@@ -50,10 +50,14 @@ public class SendNotificationBeforeClassJobConfig {
     public Job sendNotificationBeforeClassJob() {
         return this.jobBuilderFactory.get("sendNotificationBeforeClassJob")
                 .start(addNotificationStep())
-//                .next(sendNotificationStep())
+                .next(sendNotificationStep())
                 .build();
     }
 
+    /**
+     * 예약 데이터를 이용하여 알림데이터를 생성
+     * @return
+     */
     @Bean
     public Step addNotificationStep() {
         return this.stepBuilderFactory.get("addNotificationStep")
@@ -89,6 +93,10 @@ public class SendNotificationBeforeClassJobConfig {
                 .build();
     }
 
+    /**
+     * 알림 대상 데이터를 조회하여 대상들에게 카카오톡 알림을 보낸다.
+     * @return
+     */
     @Bean
     public Step sendNotificationStep() {
         return this.stepBuilderFactory.get("sendNotificationStep")
